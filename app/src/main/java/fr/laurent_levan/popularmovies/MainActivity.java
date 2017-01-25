@@ -3,14 +3,21 @@ package fr.laurent_levan.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -34,9 +41,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private ProgressBar mLoadingIndicator;
 
+    private String mOrderByOption;
+    private Spinner mSpinner;
+
+    private final static String OPTION_SELECTED = "selected";
+
+    private int optionSelected = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //initialize the orderByOption to avoid Error after
+        mOrderByOption = getResources().getStringArray(R.array.sort_by_value)[optionSelected];
+
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            optionSelected = savedInstanceState.getInt(OPTION_SELECTED);
+        }
         setContentView(R.layout.activity_main);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movies);
@@ -62,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void loadMoviesData() {
         showMoviesDataView();
 
-        new FetchMoviesTask().execute("popularity.desc");
+        new FetchMoviesTask().execute(mOrderByOption);
     }
 
     private void showMoviesDataView(){
@@ -120,4 +141,43 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_sort);
+        mSpinner = (Spinner) MenuItemCompat.getActionView(item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort_by_display, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setSelection(optionSelected);
+
+        AdapterView.OnItemSelectedListener sortedByOptionSelectedListener = new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> spinner, View container, int position, long id) {
+                String[] orderByArray = getResources().getStringArray(R.array.sort_by_value);
+                mOrderByOption = orderByArray[position];
+                optionSelected = position;
+                loadMoviesData();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+        mSpinner.setOnItemSelectedListener(sortedByOptionSelectedListener);
+
+        mSpinner.getOnItemSelectedListener();
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(OPTION_SELECTED,optionSelected);
+        super.onSaveInstanceState(outState);
+
+    }
 }

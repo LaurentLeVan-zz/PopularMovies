@@ -1,7 +1,6 @@
 package fr.laurent_levan.popularmovies.utilities;
 
 import android.net.Uri;
-import android.support.compat.BuildConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,22 +17,19 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     private static final String STATIC_MOVIEDB_URL =
-            "https://api.themoviedb.org/3/discover/movie";
+            "https://api.themoviedb.org/3/movie/";
 
     private static final String MOVIEDB_BASE_URL = STATIC_MOVIEDB_URL;
-
-    private final static String SORT_BY_PARAM = "sort_by";
 
     private final static String KEY_PARAM = "api_key";
 
     public static URL buildUrl(String sortByOption) {
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
-                .appendQueryParameter(SORT_BY_PARAM, sortByOption)
+                .appendPath(sortByOption)
                 .appendQueryParameter(KEY_PARAM, fr.laurent_levan.popularmovies.BuildConfig.THE_MOVIE_DB_API_KEY)
                 .build();
 
         URL url = null;
-
         try {
             url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
