@@ -16,6 +16,7 @@ public class Movie implements Parcelable {
     private String posterSrc;
     private String plotSynopsis;
     private Float userRating;
+    private Date releaseDate;
 
     public Integer getMovieId() {
         return movieId;
@@ -65,8 +66,6 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
-    private Date releaseDate;
-
 
     /**
      * Constructor for a movie
@@ -78,22 +77,23 @@ public class Movie implements Parcelable {
      * @param releaseDate the release date
      */
     public Movie(Integer movieId, String originalTitle, String posterSrc, String plotSynopsis, Float userRating, Date releaseDate) {
+        this.movieId = movieId;
         this.originalTitle = originalTitle;
         this.posterSrc = posterSrc;
         this.plotSynopsis = plotSynopsis;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
-        this.movieId = movieId;
+
     }
 
 
     protected Movie(Parcel in) {
+        movieId = in.readInt();
         originalTitle = in.readString();
         posterSrc = in.readString();
         plotSynopsis = in.readString();
         userRating = in.readFloat();
         releaseDate = new Date(in.readLong());
-        movieId = in.readInt();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -120,6 +120,6 @@ public class Movie implements Parcelable {
         dest.writeString(posterSrc);
         dest.writeString(plotSynopsis);
         dest.writeFloat(userRating);
-        dest.writeDouble(releaseDate.getTime());
+        dest.writeLong(releaseDate.getTime());
     }
 }

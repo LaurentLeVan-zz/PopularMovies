@@ -20,14 +20,28 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
     private static final String imageBaseUrl = "https://image.tmdb.org/t/p/w185";
 
     /**
      * List of movies
      */
     private ArrayList<Movie> mMoviesData;
+
+    /**
+     * on-click handler
+     */
+    private final MovieAdapterOnClickHandler mClickHandler;
+
+    /**
+     * An interface to receives onClick messages.
+     */
+    public interface MovieAdapterOnClickHandler {
+        void onClick(Movie movieChosen);
+    }
+
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler){
+        mClickHandler = clickHandler;
+    }
 
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,12 +68,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
 
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder{
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final ImageView mMovieImageView;
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
             mMovieImageView = (ImageView) itemView.findViewById(R.id.iv_movie_data);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Movie movieChosen = mMoviesData.get(adapterPosition);
+            mClickHandler.onClick(movieChosen);
         }
     }
 

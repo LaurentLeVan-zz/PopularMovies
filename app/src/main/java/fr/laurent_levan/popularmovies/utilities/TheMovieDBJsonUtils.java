@@ -1,6 +1,7 @@
 package fr.laurent_levan.popularmovies.utilities;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,48 +41,50 @@ public final class TheMovieDBJsonUtils {
         final String TMDB_STATUS_MS = "status_message";
         final String TMDB_STATUS_CODE = "status_code";
 
+        final String TAG = "DetailActivity";
+
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JSONObject movieJson = new JSONObject(moviesJsonStr);
 
         if(movieJson.has(TMDB_STATUS_CODE)){
-            int errorCode = movieJson.getInt(TMDB_STATUS_CODE);
+            return null;
+        }else {
 
-        }
+            ArrayList<Movie> movies = new ArrayList<>();
 
-        ArrayList<Movie> movies = new ArrayList<>();
+            JSONArray moviesJSONArray = movieJson.getJSONArray(TMDB_RESULTS);
 
-        JSONArray moviesJSONArray = movieJson.getJSONArray(TMDB_RESULTS);
+            JSONObject currentJSONMovie;
+            Movie currentObject;
+            String posterPath;
+            String overview;
+            String originalTitle;
+            int movieId;
+            Float vote;
+            String dateStr;
+            Date date;
 
-        JSONObject currentJSONMovie;
-        Movie currentObject;
-        String posterPath;
-        String overview;
-        String originalTitle;
-        int movieId;
-        Float vote;
-        String dateStr;
-        Date date;
-
-        for(int i =0; i< moviesJSONArray.length();i++) {
-            currentJSONMovie = moviesJSONArray.getJSONObject(i);
-            posterPath = currentJSONMovie.getString(TMDB_POSTER_PATH);
-            overview = currentJSONMovie.getString(TMDB_OVERVIEW);
-            originalTitle = currentJSONMovie.getString(TMDB_ORIGINAL_TITLE);
-            movieId = currentJSONMovie.getInt(TMDB_ID);
-            vote = BigDecimal.valueOf(currentJSONMovie.getDouble(TMDB_VOTE)).floatValue();
-            dateStr = currentJSONMovie.getString(TMDB_RELEASE_DATE);
-            try {
-                date = sdf.parse(dateStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-                date = null;
+            for (int i = 0; i < moviesJSONArray.length(); i++) {
+                currentJSONMovie = moviesJSONArray.getJSONObject(i);
+                posterPath = currentJSONMovie.getString(TMDB_POSTER_PATH);
+                overview = currentJSONMovie.getString(TMDB_OVERVIEW);
+                originalTitle = currentJSONMovie.getString(TMDB_ORIGINAL_TITLE);
+                movieId = currentJSONMovie.getInt(TMDB_ID);
+                vote = BigDecimal.valueOf(currentJSONMovie.getDouble(TMDB_VOTE)).floatValue();
+                dateStr = currentJSONMovie.getString(TMDB_RELEASE_DATE);
+                try {
+                    date = sdf.parse(dateStr);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    date = null;
+                }
+                currentObject = new Movie(movieId, originalTitle, posterPath, overview, vote, date);
+                movies.add(currentObject);
             }
-            currentObject = new Movie(movieId,originalTitle,posterPath,overview,vote,date);
-            movies.add(currentObject);
-        }
 
-        return movies;
+            return movies;
+        }
 
     }
 }
