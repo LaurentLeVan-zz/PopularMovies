@@ -3,14 +3,11 @@ package fr.laurent_levan.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.PersistableBundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.net.URL;
 import java.util.ArrayList;
 
+import fr.laurent_levan.popularmovies.data.Movie;
+import fr.laurent_levan.popularmovies.data.Trailer;
 import fr.laurent_levan.popularmovies.utilities.NetworkUtils;
 import fr.laurent_levan.popularmovies.utilities.TheMovieDBJsonUtils;
 
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             }
 
             String sortBy = params[0];
-            URL moviesRequestUrl = NetworkUtils.buildUrl(sortBy);
+            URL moviesRequestUrl = NetworkUtils.buildGetMoviesUrl(sortBy);
 
             try {
                 String jsonMoviesResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);

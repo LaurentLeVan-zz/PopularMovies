@@ -23,7 +23,7 @@ public class NetworkUtils {
 
     private final static String KEY_PARAM = "api_key";
 
-    public static URL buildUrl(String sortByOption) {
+    public static URL buildGetMoviesUrl(String sortByOption) {
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendPath(sortByOption)
                 .appendQueryParameter(KEY_PARAM, fr.laurent_levan.popularmovies.BuildConfig.THE_MOVIE_DB_API_KEY)
@@ -37,6 +37,24 @@ public class NetworkUtils {
         }
 
         return url;
+    }
+
+    public static URL buildGetTrailersUrl(String movie_id) {
+
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(movie_id)
+                .appendPath("videos")
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+
     }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {

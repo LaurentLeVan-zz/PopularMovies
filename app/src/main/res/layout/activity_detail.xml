@@ -1,52 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-<LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="fr.laurent_levan.popularmovies.DetailActivity"
-    android:orientation="vertical"
-    android:padding="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:text="TextView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22dp"
-        android:id="@+id/tv_movie_title"
-        android:textAlignment="center"
-        android:paddingBottom="12dp"/>
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:id="@+id/iv_movie_poster"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_movie_release_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:textAlignment="center"
-        android:padding="6dp"/>
+        <LinearLayout
+            android:id="@+id/activity_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="fr.laurent_levan.popularmovies.DetailActivity">
 
-    <RatingBar
-        android:id="@+id/rb_movie_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+            <include
+                android:id="@+id/primary_info"
+                layout="@layout/primary_movie_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_movie_synopsis"
-        android:textSize="18dp"
-        android:layout_gravity="center_vertical|right"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/darker_gray" />
 
-</LinearLayout>
-</ScrollView>
+            <include
+                android:id="@+id/trailers_info"
+                layout="@layout/trailer_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

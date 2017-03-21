@@ -7,6 +7,6 @@
         android:title="@string/action_sort"
         app:actionViewClass="android.widget.Spinner"
         app:showAsAction="ifRoom"/>
-        />
+    />
 
 </menu>

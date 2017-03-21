@@ -1,4 +1,4 @@
-package fr.laurent_levan.popularmovies;
+package fr.laurent_levan.popularmovies.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

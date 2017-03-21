@@ -1,7 +1,6 @@
 package fr.laurent_levan.popularmovies.utilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import fr.laurent_levan.popularmovies.Movie;
+import fr.laurent_levan.popularmovies.data.Movie;
+import fr.laurent_levan.popularmovies.data.Review;
+import fr.laurent_levan.popularmovies.data.Trailer;
 
 /**
  * Created by Laurent on 22/01/2017.
@@ -87,4 +88,88 @@ public final class TheMovieDBJsonUtils {
         }
 
     }
+
+    public static ArrayList<Trailer> getTrailersFromJson(Context context, String trailerJsonStr) throws JSONException {
+
+        final String TMDB_RESULTS ="results";
+        final String TMDB_KEY = "key";
+        final String TMDB_NAME = "name";
+        final String TMDB_SITE = "site";
+        final String TMDB_STATUS_MS = "status_message";
+        final String TMDB_STATUS_CODE = "status_code";
+
+        JSONObject trailerJson = new JSONObject(trailerJsonStr);
+
+        if(trailerJson.has(TMDB_STATUS_CODE)){
+            return null;
+        }else {
+
+            ArrayList<Trailer> trailers = new ArrayList<>();
+
+            JSONArray trailersJSONArray = trailerJson.getJSONArray(TMDB_RESULTS);
+
+            JSONObject currentJSONTrailer;
+            Trailer currentObject;
+            String key;
+            String name;
+            String site;
+
+            for (int i = 0; i < trailersJSONArray.length(); i++) {
+                currentJSONTrailer = trailersJSONArray.getJSONObject(i);
+               key = currentJSONTrailer.getString(TMDB_KEY);
+                name = currentJSONTrailer.getString(TMDB_NAME);
+                site = currentJSONTrailer.getString(TMDB_SITE);
+                currentObject = new Trailer(key, name, site);
+                trailers.add(currentObject);
+            }
+
+            return trailers;
+        }
+
+    }
+
+    public static ArrayList<Review> getReviewFromJson(Context context, String reviewJsonStr) throws JSONException {
+
+        final String TMDB_RESULTS ="results";
+        final String TMDB_REVIEW_ID = "id";
+        final String TMDB_REVIEW_AUTHOR = "name";
+        final String TMDB_REVIEW_CONTENT = "content";
+        final String TMDB_REVIEW_URL = "url";
+        final String TMDB_STATUS_MS = "status_message";
+        final String TMDB_STATUS_CODE = "status_code";
+
+
+        JSONObject reviewJson = new JSONObject(reviewJsonStr);
+
+        if(reviewJson.has(TMDB_STATUS_CODE)){
+            return null;
+        }else {
+
+            ArrayList<Review> reviews = new ArrayList<>();
+
+            JSONArray reviewsJSONArray = reviewJson.getJSONArray(TMDB_RESULTS);
+
+            JSONObject currentJSONReview;
+            Review currentObject;
+            String id;
+            String author;
+            String content;
+            String url;
+
+            for (int i = 0; i < reviewsJSONArray.length(); i++) {
+                currentJSONReview = reviewsJSONArray.getJSONObject(i);
+                id = currentJSONReview.getString(TMDB_REVIEW_ID);
+                author = currentJSONReview.getString(TMDB_REVIEW_AUTHOR);
+                content = currentJSONReview.getString(TMDB_REVIEW_CONTENT);
+                url = currentJSONReview.getString(TMDB_REVIEW_URL);
+                currentObject = new Review(id , author, content, url);
+                reviews.add(currentObject);
+            }
+
+            return reviews;
+        }
+
+    }
+
+
 }
